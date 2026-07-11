@@ -59,13 +59,17 @@ class Pounce < Formula
       Start the palette daemon:
         brew services start pounce
 
-      Grant Accessibility (the daemon places its window over the frontmost app):
+      The daemon registers the hotkey itself - Cmd+Space by default. macOS
+      gives Cmd+Space to Spotlight, so free it up first (System Settings ->
+      Keyboard -> Keyboard Shortcuts -> Spotlight) or pick another combo in
+      ~/.config/pounce/config.json ("hotkey"). Prefer an external hotkey tool
+      (skhd, AeroSpace, ...)? Set hotkey.enabled to false there and bind your
+      key to `pounce-palette` instead.
+
+      Grant Accessibility (for clipboard auto-paste and emoji paste-back):
         pounce --request-accessibility
       Re-run that after every upgrade: the binary is ad-hoc signed, so its
       code identity (and the TCC grant) changes with each rebuild.
-
-      Then bind a hotkey to `pounce-palette` in your hotkey tool
-      (skhd, AeroSpace exec-and-forget, ...).
 
       Your own commands go in ~/.config/pounce/commands - one self-describing
       shell script per command, no registry, no rebuild.
