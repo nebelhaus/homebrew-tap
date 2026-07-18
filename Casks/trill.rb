@@ -1,6 +1,6 @@
 cask "trill" do
-  version "0.1.2"
-  sha256 "8fef79c5222de544244217306506055340e5c889f69029e55a2e8236d570f2d4"
+  version "0.1.3"
+  sha256 "4b446196c1df94175475d02b0c654905a940dbe4be25444b8f2c84259299e663"
 
   url "https://github.com/nebelhaus/trill/releases/download/v#{version}/trill-v#{version}-macos.zip"
   name "Trill"
