@@ -6,7 +6,7 @@ class Pounce < Formula
   license "MIT"
 
   # The url/sha256 lines above are CI-owned: pounce's release workflow
-  # rewrites them on every vX.Y.Z tag (nebelhaus/pounce, release.yml) and
+  # rewrites them on every date-versioned tag (nebelhaus/pounce, release.yml) and
   # pushes here over a deploy key. Hand-edit only to bootstrap.
   livecheck do
     url :stable
