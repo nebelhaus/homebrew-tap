@@ -15,13 +15,23 @@ cask "trill" do
     strategy :github_latest
   end
 
-  depends_on macos: ">= :sonoma"
+  depends_on macos: :sonoma
 
   app "Trill.app"
 
+  # Trill is ad-hoc signed, not notarized, so a quarantined copy trips
+  # Gatekeeper's "can't be verified / Move to Trash" dialog on first launch.
+  # Since these are our own trusted builds, strip the quarantine flag right
+  # after install so the app opens straight away — no right-click -> Open.
+  postflight do
+    system_command "/usr/bin/xattr",
+                   args: ["-dr", "com.apple.quarantine", "#{appdir}/Trill.app"]
+  end
+
   caveats <<~EOS
-    Trill is signed but not notarized. On first launch, right-click Trill.app
-    in #{appdir} and choose Open (once), or clear the quarantine flag:
+    Trill is signed but not notarized. This cask clears the Gatekeeper
+    quarantine flag on install, so it opens straight away. If macOS still
+    blocks it, clear the flag by hand:
       xattr -dr com.apple.quarantine "#{appdir}/Trill.app"
 
     The live Messages provider reads ~/Library/Messages/chat.db (always
