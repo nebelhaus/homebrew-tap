@@ -22,7 +22,7 @@ the Xcode Command Line Tools Homebrew already requires). Casks ship a prebuilt
 Open once to clear Gatekeeper).
 
 **This repo is CI-owned.** Version bumps are pushed by each project's release
-workflow when a `vX.Y.Z` tag lands (see
+workflow when a date-versioned `v<date>` tag lands (e.g. `v2026.07.18`; see
 [pounce's `release.yml`](https://github.com/nebelhaus/pounce/blob/main/.github/workflows/release.yml));
 humans only touch it to bootstrap a new formula or cask. Issues and PRs about
 the *software* belong in the project repos.

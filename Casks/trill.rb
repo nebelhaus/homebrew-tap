@@ -8,7 +8,7 @@ cask "trill" do
   homepage "https://github.com/nebelhaus/trill"
 
   # The version/sha256 lines above are CI-owned: trill's release workflow
-  # rewrites them on every vX.Y.Z tag (nebelhaus/trill, release.yml) and pushes
+  # rewrites them on every date-versioned tag (nebelhaus/trill, release.yml) and pushes
   # here over a deploy key. Hand-edit only to bootstrap.
   livecheck do
     url :url
