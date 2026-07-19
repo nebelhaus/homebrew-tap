@@ -18,8 +18,8 @@ brew install --cask trill     # cask (prebuilt app)
 
 Formulae build from source (a single `swiftc` against system frameworks — just
 the Xcode Command Line Tools Homebrew already requires). Casks ship a prebuilt
-`.app` from the project's GitHub release (signed, not notarized — right-click →
-Open once to clear Gatekeeper).
+`.app` from the project's GitHub release (signed, not notarized — the cask clears
+the Gatekeeper quarantine flag on install, so the app opens straight away).
 
 **This repo is CI-owned.** Version bumps are pushed by each project's release
 workflow when a date-versioned `v<date>` tag lands (e.g. `v2026.07.18`; see
