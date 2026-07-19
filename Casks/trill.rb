@@ -19,21 +19,10 @@ cask "trill" do
 
   app "Trill.app"
 
-  # Trill is ad-hoc signed, not notarized, so a quarantined copy trips
-  # Gatekeeper's "can't be verified / Move to Trash" dialog on first launch.
-  # Since these are our own trusted builds, strip the quarantine flag right
-  # after install so the app opens straight away — no right-click -> Open.
-  postflight do
-    system_command "/usr/bin/xattr",
-                   args: ["-dr", "com.apple.quarantine", "#{appdir}/Trill.app"]
-  end
+  # Trill is signed with our Developer ID and notarized by Apple (nebelhaus/trill,
+  # release.yml), so Gatekeeper clears it on first launch — no quarantine hack.
 
   caveats <<~EOS
-    Trill is signed but not notarized. This cask clears the Gatekeeper
-    quarantine flag on install, so it opens straight away. If macOS still
-    blocks it, clear the flag by hand:
-      xattr -dr com.apple.quarantine "#{appdir}/Trill.app"
-
     The live Messages provider reads ~/Library/Messages/chat.db (always
     read-only) and needs Full Disk Access. Grant it once in System Settings ->
     Privacy & Security -> Full Disk Access (add Trill). Fixture mode needs
