@@ -1,11 +1,12 @@
 class Pounce < Formula
   desc "Summon, aim, pounce - a native, scriptable command palette for macOS"
   homepage "https://github.com/nebelhaus/pounce"
-  url "https://github.com/nebelhaus/pounce/releases/download/v2026.07.19-1/pounce-src-v2026.07.19-1.tar.gz"
+  version "2026.07.19-1"
+  url "https://github.com/nebelhaus/pounce/releases/download/v#{version}/pounce-v#{version}-macos.tar.gz"
   sha256 "08467a623aab9b3f519512faf4a7d26b973baa53f248a794bd07afe93dc9a9f5"
   license "MIT"
 
-  # The url/sha256 lines above are CI-owned: pounce's release workflow
+  # The version/sha256 lines above are CI-owned: pounce's release workflow
   # rewrites them on every date-versioned tag (nebelhaus/pounce, release.yml) and
   # pushes here over a deploy key. Hand-edit only to bootstrap.
   livecheck do
@@ -13,23 +14,24 @@ class Pounce < Formula
     strategy :github_latest
   end
 
-  depends_on :macos
+  # The release ships a prebuilt Pounce.app, signed with our Developer ID and
+  # notarized — arm64 only, matching the nix aarch64-darwin target.
+  depends_on arch: :arm64
+  depends_on macos: :sonoma
 
   def install
-    # Same compile + bundle assembly as the Nix derivation (pkgs/pounce/build.sh
-    # is the shared single source of truth). Needs only the Xcode CLT swiftc.
-    ENV["POUNCE_VERSION"] = version.to_s
-    system "bash", "pkgs/pounce/build.sh"
-
-    prefix.install "pkgs/pounce/Pounce.app"
+    # Prebuilt bundle from the release tarball: Pounce.app is already signed with
+    # our Developer ID and notarized (nebelhaus/pounce, release.yml). We only
+    # place it and the command scripts — no compile step anymore.
+    prefix.install "Pounce.app"
     bin.install_symlink prefix/"Pounce.app/Contents/MacOS/pounce"
-    bin.install "pkgs/pounce/ports"
+    bin.install "ports"
 
     # The built-in command set, discovered by pounce-palette at runtime
     # (keg layout: <bin>/../share/pounce/commands is the script's default).
-    (pkgshare/"commands").install Dir["pkgs/pounce-commands/commands/*.sh"]
+    (pkgshare/"commands").install Dir["commands/*.sh"]
     (pkgshare/"commands").install_symlink bin/"ports" => "ports.sh"
-    bin.install "pkgs/pounce-commands/pounce-palette"
+    bin.install "pounce-palette"
 
     # pounce-<id> wrappers, mirroring the Nix package (hotkey-friendly bins).
     Dir[pkgshare/"commands/*.sh"].map { |f| File.basename(f, ".sh") }.each do |id|
@@ -68,8 +70,8 @@ class Pounce < Formula
 
       Grant Accessibility (for clipboard auto-paste and emoji paste-back):
         pounce --request-accessibility
-      Re-run that after every upgrade: the binary is ad-hoc signed, so its
-      code identity (and the TCC grant) changes with each rebuild.
+      The app is signed with a stable Developer ID, so this grant now persists
+      across upgrades (it no longer has to be re-granted after each release).
 
       Your own commands go in ~/.config/pounce/commands - one self-describing
       shell script per command, no registry, no rebuild.
