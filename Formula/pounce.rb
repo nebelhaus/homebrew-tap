@@ -66,7 +66,13 @@ class Pounce < Formula
       Keyboard -> Keyboard Shortcuts -> Spotlight) or pick another combo in
       ~/.config/pounce/config.json ("hotkey"). Prefer an external hotkey tool
       (skhd, AeroSpace, ...)? Set hotkey.enabled to false there and bind your
-      key to `pounce-palette` instead.
+      key to `pounce-palette` instead - but DON'T do both, or the external
+      binding shadows the fast built-in hotkey and every summon spawns a client.
+
+      Palette slow to open, or Cmd+Space does nothing? Run:
+        pounce doctor
+      It names whatever is shadowing the hotkey (a leftover skhd/AeroSpace
+      binding, Spotlight, a missing grant) and how to fix it.
 
       Grant Accessibility (for clipboard auto-paste and emoji paste-back):
         pounce --request-accessibility
